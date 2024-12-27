@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caribbean Citizenship Cost Calculator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Caribbean Citizenship Cost Calculator</h1>
+        <label for="program">Select Program:</label>
+        <select id="program">
+            <option value="dominica">Dominica</option>
+            <option value="st-kitts">St. Kitts & Nevis</option>
+            <option value="antigua">Antigua & Barbuda</option>
+        </select>
+
+        <label for="family-size">Family Size (number of members):</label>
+        <input type="number" id="family-size" placeholder="Enter number of family members">
+
+        <label for="investment">Investment Type:</label>
+        <select id="investment">
+            <option value="donation">Donation</option>
+            <option value="real-estate">Real Estate</option>
+        </select>
+
+        <button id="calculate">Calculate Total Cost</button>
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    padding: 0;
+    background-color: #f4f4f9;
+}
+.container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+h1 {
+    text-align: center;
+    color: #333;
+}
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #0056b3;
+}
+.result {
+    padding: 10px;
+    background: #e7f3e7;
+    border: 1px solid #a1d4a1;
+    border-radius: 4px;
+    color: #2a672a;
+}
+const costData = {
+    dominica: { donation: 100000, realEstate: 200000, feePerPerson: 25000 },
+    "st-kitts": { donation: 150000, realEstate: 220000, feePerPerson: 30000 },
+    antigua: { donation: 130000, realEstate: 210000, feePerPerson: 28000 },
+};
+
+document.getElementById('calculate').addEventListener('click', () => {
+    const program = document.getElementById('program').value;
+    const familySize = parseInt(document.getElementById('family-size').value) || 0;
+    const investment = document.getElementById('investment').value;
+
+    if (!program || !investment || familySize <= 0) {
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    const baseCost = costData[program][investment];
+    const fees = costData[program].feePerPerson * familySize;
+    const totalCost = baseCost + fees;
+
+    const result = `
+        <strong>Selected Program:</strong> ${program.replace('-', ' ')}<br>
+        <strong>Investment Type:</strong> ${investment}<br>
+        <strong>Base Cost:</strong> $${baseCost.toLocaleString()}<br>
+        <strong>Additional Fees:</strong> $${fees.toLocaleString()}<br>
+        <strong>Total Cost:</strong> $${totalCost.toLocaleString()}
+    `;
+    const resultDiv = document.getElementById('result');
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = result;
+});
